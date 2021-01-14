@@ -1,0 +1,68 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="MvcdbModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Employee">
+    <Key>
+      <PropertyRef Name="EmployeeId" />
+    </Key>
+    <Property Name="EmployeeId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="EmployeeName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="EmployeeAddress" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="EmployeeSalary" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="EmpDep_Mapping" Relationship="MvcdbModel.FK_EmpDep_Mapping_Employee" FromRole="Employee" ToRole="EmpDep_Mapping" />
+  </EntityType>
+  <EntityContainer Name="MvcdbEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Employees" EntityType="Self.Employee" />
+    <EntitySet Name="EmpDep_Mapping" EntityType="MvcdbModel.EmpDep_Mapping" />
+    <AssociationSet Name="FK_EmpDep_Mapping_Employee" Association="MvcdbModel.FK_EmpDep_Mapping_Employee">
+      <End Role="Employee" EntitySet="Employees" />
+      <End Role="EmpDep_Mapping" EntitySet="EmpDep_Mapping" />
+    </AssociationSet>
+    <EntitySet Name="Departments" EntityType="MvcdbModel.Department" />
+    <AssociationSet Name="FK_EmpDep_Mapping_Deparment1" Association="MvcdbModel.FK_EmpDep_Mapping_Deparment1">
+      <End Role="Department" EntitySet="Departments" />
+      <End Role="EmpDep_Mapping" EntitySet="EmpDep_Mapping" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="EmpDep_Mapping">
+    <Key>
+      <PropertyRef Name="MapId" />
+    </Key>
+    <Property Name="MapId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="DepId" Type="Int32" />
+    <Property Name="EmpId" Type="Int32" />
+    <NavigationProperty Name="Employee" Relationship="MvcdbModel.FK_EmpDep_Mapping_Employee" FromRole="EmpDep_Mapping" ToRole="Employee" />
+    <NavigationProperty Name="Department" Relationship="MvcdbModel.FK_EmpDep_Mapping_Deparment1" FromRole="EmpDep_Mapping" ToRole="Department" />
+  </EntityType>
+  <Association Name="FK_EmpDep_Mapping_Employee">
+    <End Type="MvcdbModel.Employee" Role="Employee" Multiplicity="0..1" />
+    <End Type="MvcdbModel.EmpDep_Mapping" Role="EmpDep_Mapping" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Employee">
+        <PropertyRef Name="EmployeeId" />
+      </Principal>
+      <Dependent Role="EmpDep_Mapping">
+        <PropertyRef Name="EmpId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="Department">
+    <Key>
+      <PropertyRef Name="DepartmentId" />
+    </Key>
+    <Property Name="DepartmentId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="DepartmentName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="EmpDep_Mapping" Relationship="MvcdbModel.FK_EmpDep_Mapping_Deparment1" FromRole="Department" ToRole="EmpDep_Mapping" />
+  </EntityType>
+  <Association Name="FK_EmpDep_Mapping_Deparment1">
+    <End Type="MvcdbModel.Department" Role="Department" Multiplicity="0..1" />
+    <End Type="MvcdbModel.EmpDep_Mapping" Role="EmpDep_Mapping" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Department">
+        <PropertyRef Name="DepartmentId" />
+      </Principal>
+      <Dependent Role="EmpDep_Mapping">
+        <PropertyRef Name="DepId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>
